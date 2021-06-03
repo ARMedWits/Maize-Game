@@ -6,22 +6,12 @@
   <link rel="stylesheet" type="text/css" href="base.css">
 </head>
 <body>
- <div id="info2">
-  <img class ="info2" id = 'welcome' src="./resources/welcome.png"/>
-
- </div>
-
- <script >
-  setTimeout(function(){
-        var mymess = document.getElementById("welcome");
-        mymess.parentNode.removeChild(mymess);
-  },5000);
- 
-</script>
-  
-
+  <script type="text/javascript" src="../three.min.js" ></script>
   <script src="./main.js" type="module">
   </script>
+  <script type="module" src="maze.js" ></script>
+  <!-- <script src="./maze.js" type="module">
+  </script> -->
    <div id="info">
     
     <img class ="images" id = 'msg' src="./resources/maze.png"/>
@@ -32,7 +22,7 @@
       setTimeout(function(){
             var mymess = document.getElementById("msg");
             mymess.parentNode.removeChild(mymess);
-      },500000);
+      },100000);
      
    </script>
  
