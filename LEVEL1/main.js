@@ -40,7 +40,7 @@ class BasicCharacterController {
     const loader = new FBXLoader();
     loader.setPath('./resources/zombie/');
     loader.load('mremireh_o_desbiens.fbx', (fbx) => {
-      fbx.position.set(600, 25, -100);
+      fbx.position.set(80,0,550);
       fbx.scale.setScalar(0.1);
       fbx.traverse(c => {
         c.castShadow = true;
@@ -74,6 +74,12 @@ class BasicCharacterController {
       loader.load('idle.fbx', (a) => { _OnLoad('idle', a); });
       loader.load('dance.fbx', (a) => { _OnLoad('dance', a); });
     });
+
+
+    
+
+
+
   }
 
   get Position() {
@@ -592,11 +598,26 @@ class ThirdPersonCameraDemo {
     plane.rotation.x = -Math.PI / 2;
     this._scene.add(plane);
 
+    const loaders = new GLTFLoader();
+    loaders.load('./resources/Level1maze.glb', (gltf) => {
+      gltf.scene.traverse(c => {
+        c.castShadow = false;
+        if ( c.isMesh ) {
+
+          c.material.color.set( 0xFF0000);
+      
+        }
+      });
+      gltf.scene.scale.set(90,150,90);
+      gltf.scene.position.set(-500,0,-500);
+      this._scene.add(gltf.scene);
+    });
+
      // MAZE DESIGN
           // ONE AS IN LIKE 1
           
 
-          var BoxGeo =[1000, 200, 10,10, 200, 400,10, 200, 500,10, 200, 400,10, 200, 500,1000, 200, 10,10, 200, 200,10, 200, 300,200, 200, 10,10, 200, 400,300, 200, 10,10, 200, 200,10, 200, 200,300, 200, 10,150, 200, 10,10, 200, 300,250, 200, 10,10, 200, 100,150, 200, 10,600, 200, 10,10, 200, 200,10, 200, 100,150, 200, 10,10, 200, 400,150, 200, 10];
+         /* var BoxGeo =[1000, 200, 10,10, 200, 400,10, 200, 500,10, 200, 400,10, 200, 500,1000, 200, 10,10, 200, 200,10, 200, 300,200, 200, 10,10, 200, 400,300, 200, 10,10, 200, 200,10, 200, 200,300, 200, 10,150, 200, 10,10, 200, 300,250, 200, 10,10, 200, 100,150, 200, 10,600, 200, 10,10, 200, 200,10, 200, 100,150, 200, 10,10, 200, 400,150, 200, 10];
           var BoxPos = [0, 100, 500,-500, 100, 300,-500, 100, -250,500, 100, 300,500, 100, -250,0, 100, -500,20, 100, -400,-100, 100, 350,0, 100, 350,200, 100, 300,50, 100, 100,20, 100, 100,-250, 100, 300,-250, 100, 200,430, 100, 100,350, 100, 150,-380, 100, 100,-260, 100, 50,-330, 100, 0,200, 100, -100,180, 100, -100,-100, 100, -50,-330, 100, -100,-260, 100, -300,-180, 100, -300];
             var i;
           for(i = 0;i < BoxGeo.length; i = i + 3 ){
@@ -620,7 +641,13 @@ class ThirdPersonCameraDemo {
           dONE.position.set(-500,25,50);
           dONE.castShadow = true;
           dONE.receiveShadow = true;
-          this._scene.add(dONE);
+          this._scene.add(dONE);*/
+
+
+
+
+
+
 
 
           var geometry =  new THREE.BoxGeometry(10,50,100);
