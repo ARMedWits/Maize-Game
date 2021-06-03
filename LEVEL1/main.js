@@ -1,9 +1,12 @@
 import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.118/build/three.module.js';
 import {OrbitControls} from 'https://cdn.jsdelivr.net/npm/three@0.118/examples/jsm/controls/OrbitControls.js';
+import {maze} from './maze.js';
 
 import {FBXLoader} from 'https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm/loaders/FBXLoader.js';
 import {GLTFLoader} from 'https://cdn.jsdelivr.net/npm/three@0.118.1/examples/jsm/loaders/GLTFLoader.js';
 
+var crate,crate2,meshFloor,meshfloorTexture, meshfloorNormalMap, meshfloorBumpMap,
+    crateTexture,crateNormalMap,crateBumpMap;
 
 class BasicCharacterControllerProxy {
   constructor(animations) {
@@ -40,15 +43,15 @@ class BasicCharacterController {
     const loader = new FBXLoader();
     loader.setPath('./resources/zombie/');
     loader.load('mremireh_o_desbiens.fbx', (fbx) => {
-      fbx.position.set(600, 25, -100);
+      fbx.position.set(600, 0, -100);
       fbx.scale.setScalar(0.1);
       fbx.traverse(c => {
         c.castShadow = true;
+        c.receiveShadow = true;
       });
 
       this._target = fbx;
       this._params.scene.add(this._target);
-      //console.log(this._target.position);
 
       this._mixer = new THREE.AnimationMixer(this._target);
 
@@ -113,7 +116,7 @@ class BasicCharacterController {
 
     const acc = this._acceleration.clone();
     if (this._input._keys.shift) {
-      acc.multiplyScalar(2.0);
+      acc.multiplyScalar(3.0);
     }
 
     if (this._stateMachine._currentState.Name == 'dance') {
@@ -121,10 +124,10 @@ class BasicCharacterController {
     }
 
     if (this._input._keys.forward) {
-      velocity.z += acc.z * timeInSeconds;
+      velocity.z += acc.z * timeInSeconds*1.5;
     }
     if (this._input._keys.backward) {
-      velocity.z -= acc.z * timeInSeconds;
+      velocity.z -= acc.z * timeInSeconds*1.5;
     }
     if (this._input._keys.left) {
       _A.set(0, 1, 0);
@@ -520,7 +523,41 @@ class ThirdPersonCameraDemo {
     this._Initialize();
   }
 
+  
+
   _Initialize() {
+
+    var USE_WIREFRAME = false;
+
+    const fov = 60;
+    const aspect = 1920 / 1080;
+    const near = 1.0;
+    const far = 1000.0;
+    this._camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
+    this._camera.position.set(25, 10, 25);
+
+    this._scene = new THREE.Scene();
+
+   let light = new THREE.PointLight(0xffffff, 1, 1500);
+	light.position.set(100,500,0);
+	light.castShadow = true;
+	// Will not light anything closer than 0.1 units or further than 25 units
+	// light.shadow.mapSize.width = 4096;
+    // light.shadow.mapSize.height = 4096;
+    light.shadow.camera.near = 0.5;
+    light.shadow.camera.far = 5000.0;
+    // light.shadow.camera.left = 5000;
+    light.shadow.camera.right = -5000;
+    // light.shadow.camera.top = 50;
+    // light.shadow.camera.bottom = -50;
+    
+    light.shadowMapWidth = 3000; // default is 512
+    light.shadowMapHeight = 3000; // default is 512
+    this._scene.add(light);
+
+    light = new THREE.AmbientLight(0xFFFFFF, 0.2);
+    this._scene.add(light);
+
     this._threejs = new THREE.WebGLRenderer({
       antialias: true,
     });
@@ -535,35 +572,6 @@ class ThirdPersonCameraDemo {
     window.addEventListener('resize', () => {
       this._OnWindowResize();
     }, false);
-
-    const fov = 60;
-    const aspect = 1920 / 1080;
-    const near = 1.0;
-    const far = 1000.0;
-    this._camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-    this._camera.position.set(25, 10, 25);
-
-    this._scene = new THREE.Scene();
-
-    let light = new THREE.DirectionalLight(0xFFFFFF, 1.0);
-    light.position.set(-100, 100, 100);
-    light.target.position.set(0, 0, 0);
-    light.castShadow = true;
-    light.shadow.bias = -0.001;
-    light.shadow.mapSize.width = 4096;
-    light.shadow.mapSize.height = 4096;
-    light.shadow.camera.near = 0.1;
-    light.shadow.camera.far = 500.0;
-    light.shadow.camera.near = 0.5;
-    light.shadow.camera.far = 500.0;
-    light.shadow.camera.left = 50;
-    light.shadow.camera.right = -50;
-    light.shadow.camera.top = 50;
-    light.shadow.camera.bottom = -50;
-    this._scene.add(light);
-
-    light = new THREE.AmbientLight(0xFFFFFF, 0.25);
-    this._scene.add(light);
 
     const controls = new OrbitControls(
       this._camera, this._threejs.domElement);
@@ -582,75 +590,84 @@ class ThirdPersonCameraDemo {
     texture.encoding = THREE.sRGBEncoding;
     this._scene.background = texture;
 
+    // _LoadModels();
+
     const plane = new THREE.Mesh(
-        new THREE.PlaneGeometry(1000, 1000, 10, 10),
+        new THREE.PlaneGeometry(2000, 2000, 10, 10),
         new THREE.MeshStandardMaterial({
             color: 0x808080,
           }));
-    plane.castShadow = false;
+    plane.castShadow = true;
     plane.receiveShadow = true;
     plane.rotation.x = -Math.PI / 2;
     this._scene.add(plane);
+    
+    var myscene = this._scene;
+    maze(myscene);
 
-     // MAZE DESIGN
-          // ONE AS IN LIKE 1
-          
+    var textureLoader = new THREE.TextureLoader();
+	meshfloorTexture = textureLoader.load("grass/grass01.jpg");
+	meshfloorBumpMap = textureLoader.load("grass/grass01_h.jpg");
+	meshfloorNormalMap = textureLoader.load("grass/grass01_n.jpg");
+	
+	meshFloor = new THREE.Mesh(
+		new THREE.PlaneGeometry(2000,2000, 10,10),
+		// MeshBasicMaterial does not react to lighting, so we replace with MeshPhongMaterial
+		new THREE.MeshPhongMaterial({
+			color:0xffffff,
+			wireframe:USE_WIREFRAME,
+			map:meshfloorTexture,
+			bumpMap:meshfloorBumpMap,
+			normalMap:meshfloorNormalMap
+		})
+		// See threejs.org/examples/ for other material types
+	);
+	meshFloor.rotation.x -= Math.PI / 2;
+	// Floor can have shadows cast onto it
+	meshFloor.receiveShadow = true;
+	this._scene.add(meshFloor);
 
-          var BoxGeo =[1000, 200, 10,10, 200, 400,10, 200, 500,10, 200, 400,10, 200, 500,1000, 200, 10,10, 200, 200,10, 200, 300,200, 200, 10,10, 200, 400,300, 200, 10,10, 200, 200,10, 200, 200,300, 200, 10,150, 200, 10,10, 200, 300,250, 200, 10,10, 200, 100,150, 200, 10,600, 200, 10,10, 200, 200,10, 200, 100,150, 200, 10,10, 200, 400,150, 200, 10];
-          var BoxPos = [0, 100, 500,-500, 100, 300,-500, 100, -250,500, 100, 300,500, 100, -250,0, 100, -500,20, 100, -400,-100, 100, 350,0, 100, 350,200, 100, 300,50, 100, 100,20, 100, 100,-250, 100, 300,-250, 100, 200,430, 100, 100,350, 100, 150,-380, 100, 100,-260, 100, 50,-330, 100, 0,200, 100, -100,180, 100, -100,-100, 100, -50,-330, 100, -100,-260, 100, -300,-180, 100, -300];
-            var i;
-          for(i = 0;i < BoxGeo.length; i = i + 3 ){
+	crateTexture = textureLoader.load("crate0/crate0_diffuse.png");
+	crateBumpMap = textureLoader.load("crate0/crate0_bump.png");
+	crateNormalMap = textureLoader.load("crate0/crate0_normal.png");
+	
+	// Create mesh with these textures
+	crate = new THREE.Mesh(
+		new THREE.BoxGeometry(10,10,10),
+		new THREE.MeshPhongMaterial({
+			color:0xffffff,
+			
+			map:crateTexture,
+			bumpMap:crateBumpMap,
+			normalMap:crateNormalMap
+		})
+	);
+	this._scene.add(crate);
+	crate.position.set(600, 20, 50);
+	crate.receiveShadow = true;
+	crate.castShadow = true;
 
-            const Wall = new THREE.Mesh(
-              new THREE.BoxGeometry(BoxGeo[i], BoxGeo[i+1], BoxGeo[i+2]),
-              new THREE.MeshStandardMaterial({
-                  color: 0xFF0000,
-              }));
-            Wall.position.set(BoxPos[i],BoxPos[i+1],BoxPos[i+2]);
-            Wall.castShadow = true;
-            Wall.receiveShadow = true;
-            this._scene.add(Wall);
-
-          }
-          const dONE = new THREE.Mesh(
-            new THREE.BoxGeometry(10,50,100),
-            new THREE.MeshStandardMaterial({
-                color: 0x008000,
-            }));
-          dONE.position.set(-500,25,50);
-          dONE.castShadow = true;
-          dONE.receiveShadow = true;
-          this._scene.add(dONE);
-
-
-          var geometry =  new THREE.BoxGeometry(10,50,100);
-          var cubeMaterials=[
-            new THREE.MeshBasicMaterial( {map: new THREE.TextureLoader().load('./resources/imag.jpg'), side: THREE.DoubleSide}),
-            new THREE.MeshBasicMaterial( {map: new THREE.TextureLoader().load('./resources/imag.jpg'), side: THREE.DoubleSide}),
-            new THREE.MeshBasicMaterial( {map: new THREE.TextureLoader().load('./resources/imag.jpg'), side: THREE.DoubleSide}),
-            new THREE.MeshBasicMaterial( {map: new THREE.TextureLoader().load('./resources/imag.jpg'), side: THREE.DoubleSide}),
-            new THREE.MeshBasicMaterial( {map: new THREE.TextureLoader().load('./resources/imag.jpg'), side: THREE.DoubleSide}),
-            new THREE.MeshBasicMaterial( {map: new THREE.TextureLoader().load('./resources/imag.jpg'), side: THREE.DoubleSide}),
-
-          ];
-          var materials = new THREE.MeshFaceMaterial(cubeMaterials);
-          var cubes = new THREE.Mesh(geometry,materials);
-          cubes.position.set(-500,25,50);
-          this._scene.add(cubes);
-
-         // console.log(BasicCharacterController.position);
-
-         
-      
-      
-      
-      
+	crate2 = new THREE.Mesh(
+		new THREE.BoxGeometry(10,10,10),
+		new THREE.MeshPhongMaterial({
+			color:0xffffff,
+			
+			map:crateTexture,
+			bumpMap:crateBumpMap,
+			normalMap:crateNormalMap
+		})
+	);
+	this._scene.add(crate2);
+	crate2.position.set(-600, 20, 50);
+	crate2.receiveShadow = true;
+	crate2.castShadow = true;
 
     this._mixers = [];
     this._previousRAF = null;
 
     this._LoadAnimatedModel();
     this._RAF();
+    this._LoadModels();
   }
 
   _LoadAnimatedModel() {
@@ -684,6 +701,11 @@ class ThirdPersonCameraDemo {
       this._Step(t - this._previousRAF);
       this._previousRAF = t;
     });
+    crate.rotation.x += 0.01;
+	crate.rotation.y += 0.02;
+
+	crate2.rotation.x += 0.01;
+	crate2.rotation.y += 0.02;
   }
 
   _Step(timeElapsed) {
