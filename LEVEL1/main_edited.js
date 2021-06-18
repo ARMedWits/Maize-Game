@@ -19,6 +19,7 @@ class BasicCharacterControllerProxy {
 };
 
 
+
 class BasicCharacterController {
   constructor(params) {
     this._Init(params);
@@ -36,14 +37,17 @@ class BasicCharacterController {
     this._stateMachine = new CharacterFSM(
         new BasicCharacterControllerProxy(this._animations));
 
-    this._LoadModels();
+
+    this._LoadModels()
   }
 
   _LoadModels() {
     const loader = new FBXLoader();
     loader.setPath('./resources/zombie/');
     loader.load('mremireh_o_desbiens.fbx', (fbx) => {
-      fbx.position.set(600, 0, -100);
+
+      fbx.position.set(550,0,-100); // the position of the zombie man
+
       fbx.scale.setScalar(0.1);
       fbx.traverse(c => {
         c.castShadow = true;
@@ -63,7 +67,7 @@ class BasicCharacterController {
       const _OnLoad = (animName, anim) => {
         const clip = anim.animations[0];
         const action = this._mixer.clipAction(clip);
-  
+
         this._animations[animName] = {
           clip: clip,
           action: action,
@@ -79,11 +83,8 @@ class BasicCharacterController {
     });
 
 
-    
-
-
-
   }
+
 
   get Position() {
     return this._position;
@@ -175,7 +176,7 @@ class BasicCharacterController {
 
 class BasicCharacterControllerInput {
   constructor() {
-    this._Init();    
+    this._Init();
   }
 
   _Init() {
@@ -189,6 +190,7 @@ class BasicCharacterControllerInput {
     };
     document.addEventListener('keydown', (e) => this._onKeyDown(e), false);
     document.addEventListener('keyup', (e) => this._onKeyUp(e), false);
+
     // start1
 
     // added AUDIO
@@ -201,13 +203,14 @@ class BasicCharacterControllerInput {
     //start1 ends
   }
 
-  
   _onKeyDown(event) {
+
     //start2
 
     const myAudio = this._audio; // audio for key down
 
     //start2 ends
+
     switch (event.keyCode) {
       case 87: // w
         this._keys.forward = true;
@@ -216,7 +219,7 @@ class BasicCharacterControllerInput {
 
         //when zombie moves forward, make sound
         if(!this._audio.isPlaying){
-          this._audioLoader.load("WhatsApp Audio 2021-06-18 at 10.56.40.mpga", function(buffer) {
+          this._audioLoader.load("correctFootStep-[AudioTrimmer.com].mp3", function(buffer) {
 
               myAudio.setBuffer(buffer);
               myAudio.duration = 1.3;
@@ -238,7 +241,7 @@ class BasicCharacterControllerInput {
         //when zombie moves forward, make sound
 
         if(!this._audio.isPlaying){
-          this._audioLoader.load("WhatsApp Audio 2021-06-18 at 10.56.40.mpga", function(buffer) {
+          this._audioLoader.load("correctFootStep-[AudioTrimmer.com].mp3", function(buffer) {
               myAudio.setBuffer(buffer);
               myAudio.duration = 1.3;
               myAudio.play();
@@ -246,12 +249,15 @@ class BasicCharacterControllerInput {
         }
 
         //start4 ends
+
         break;
       case 68: // d
         this._keys.right = true;
         break;
       case 32: // SPACE
+
         this._keys.space = true;
+
         break;
       case 16: // SHIFT
         this._keys.shift = true;
@@ -296,7 +302,7 @@ class FiniteStateMachine {
 
   SetState(name) {
     const prevState = this._currentState;
-    
+
     if (prevState) {
       if (prevState.Name == name) {
         return;
@@ -364,15 +370,18 @@ class DanceState extends State {
     mixer.addEventListener('finished', this._FinishedCallback);
 
     if (prevState) {
+
       const prevAction = this._parent._proxy._animations[prevState.Name].action;
 
-      curAction.reset();  
+      curAction.reset();
       curAction.setLoop(THREE.LoopOnce, 1);
       curAction.clampWhenFinished = true;
       curAction.crossFadeFrom(prevAction, 0.2, true);
       curAction.play();
     } else {
+
       curAction.play();
+
     }
   }
 
@@ -383,7 +392,7 @@ class DanceState extends State {
 
   _Cleanup() {
     const action = this._parent._proxy._animations['dance'].action;
-    
+
     action.getMixer().removeEventListener('finished', this._CleanupCallback);
   }
 
@@ -406,8 +415,10 @@ class WalkState extends State {
   }
 
   Enter(prevState) {
+
     const curAction = this._parent._proxy._animations['walk'].action;
     if (prevState) {
+
       const prevAction = this._parent._proxy._animations[prevState.Name].action;
 
       curAction.enabled = true;
@@ -424,6 +435,7 @@ class WalkState extends State {
       curAction.crossFadeFrom(prevAction, 0.5, true);
       curAction.play();
     } else {
+
       curAction.play();
     }
   }
@@ -433,6 +445,7 @@ class WalkState extends State {
 
   Update(timeElapsed, input) {
     if (input._keys.forward || input._keys.backward) {
+
       if (input._keys.shift) {
         this._parent.SetState('run');
       }
@@ -520,6 +533,7 @@ class IdleState extends State {
   }
 
   Update(_, input) {
+
     if (input._keys.forward || input._keys.backward) {
       this._parent.SetState('walk');
     } else if (input._keys.space) {
@@ -530,6 +544,7 @@ class IdleState extends State {
 
 
 class ThirdPersonCamera {
+
   constructor(params) {
     this._params = params;
     this._camera = params.camera;
@@ -574,7 +589,6 @@ class ThirdPersonCameraDemo {
     this._Initialize();
   }
 
-  
 
   _Initialize() {
 
@@ -590,8 +604,8 @@ class ThirdPersonCameraDemo {
     this._scene = new THREE.Scene();
 
    let light = new THREE.PointLight(0xffffff, 1, 1500);
-	light.position.set(100,500,0);
-	light.castShadow = true;
+   light.position.set(100,500,0);
+   light.castShadow = true;
 	// Will not light anything closer than 0.1 units or further than 25 units
 	// light.shadow.mapSize.width = 4096;
     // light.shadow.mapSize.height = 4096;
@@ -601,7 +615,7 @@ class ThirdPersonCameraDemo {
     light.shadow.camera.right = -5000;
     // light.shadow.camera.top = 50;
     // light.shadow.camera.bottom = -50;
-    
+
     light.shadowMapWidth = 3000; // default is 512
     light.shadowMapHeight = 3000; // default is 512
     this._scene.add(light);
@@ -620,20 +634,27 @@ class ThirdPersonCameraDemo {
 
     document.body.appendChild(this._threejs.domElement);
 
-    // AUDIO
-   const audioLoader = new THREE.AudioLoader();
 
-   const listener = new THREE.AudioListener();
+    //start5
 
-   // check if you can stop this from here
-   const audio = new THREE.Audio(listener);
+    // AUDIO for the whole game
+    const audioLoaderMain = new THREE.AudioLoader();
 
-   audioLoader.load("Apocalyptica - S.V.E.R Shadow War.mp3", function(buffer) {
-       audio.setBuffer(buffer);
-       audio.setLoop(true);
-       audio.setVolume(0.2);
-       audio.play();
-   });
+    const listener = new THREE.AudioListener();
+
+    //
+    const audioMain = new THREE.Audio(listener);
+
+    audioLoaderMain.load("https://cdn.rawgit.com/ellenprobst/web-audio-api-with-Threejs/57582104/lib/TheWarOnDrugs.m4a", function(buffer) {
+        audioMain.setBuffer(buffer);
+        audioMain.setLoop(true);
+        audioMain.setVolume( 0.2);
+        audioMain.play();
+    });
+
+    // audio code ends here
+
+    //start5 ends here
 
     window.addEventListener('resize', () => {
       this._OnWindowResize();
@@ -667,7 +688,6 @@ class ThirdPersonCameraDemo {
     plane.receiveShadow = true;
     plane.rotation.x = -Math.PI / 2;
     this._scene.add(plane);
-    
     var myscene = this._scene;
     maze(myscene);
 
@@ -675,7 +695,7 @@ class ThirdPersonCameraDemo {
 	meshfloorTexture = textureLoader.load("grass/grass01.jpg");
 	meshfloorBumpMap = textureLoader.load("grass/grass01_h.jpg");
 	meshfloorNormalMap = textureLoader.load("grass/grass01_n.jpg");
-	
+
 	meshFloor = new THREE.Mesh(
 		new THREE.PlaneGeometry(2000,2000, 10,10),
 		// MeshBasicMaterial does not react to lighting, so we replace with MeshPhongMaterial
@@ -696,13 +716,13 @@ class ThirdPersonCameraDemo {
 	crateTexture = textureLoader.load("crate0/crate0_diffuse.png");
 	crateBumpMap = textureLoader.load("crate0/crate0_bump.png");
 	crateNormalMap = textureLoader.load("crate0/crate0_normal.png");
-	
+
 	// Create mesh with these textures
 	crate = new THREE.Mesh(
 		new THREE.BoxGeometry(10,10,10),
 		new THREE.MeshPhongMaterial({
 			color:0xffffff,
-			
+
 			map:crateTexture,
 			bumpMap:crateBumpMap,
 			normalMap:crateNormalMap
@@ -717,7 +737,7 @@ class ThirdPersonCameraDemo {
 		new THREE.BoxGeometry(10,10,10),
 		new THREE.MeshPhongMaterial({
 			color:0xffffff,
-			
+
 			map:crateTexture,
 			bumpMap:crateBumpMap,
 			normalMap:crateNormalMap
@@ -740,6 +760,7 @@ class ThirdPersonCameraDemo {
     const params = {
       camera: this._camera,
       scene: this._scene,
+
     }
     this._controls = new BasicCharacterController(params);
 
@@ -747,6 +768,8 @@ class ThirdPersonCameraDemo {
       camera: this._camera,
       target: this._controls,
     });
+
+
   }
 
   _OnWindowResize() {
@@ -815,5 +838,5 @@ function _TestLerp(t1, t2) {
 
 _TestLerp(0.01, 0.01);
 _TestLerp(1.0 / 100.0, 1.0 / 50.0);
-_TestLerp(1.0 - Math.pow(0.3, 1.0 / 100.0), 
+_TestLerp(1.0 - Math.pow(0.3, 1.0 / 100.0),
           1.0 - Math.pow(0.3, 1.0 / 50.0));
