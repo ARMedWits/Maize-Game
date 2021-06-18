@@ -43,11 +43,7 @@ class BasicCharacterController {
     const loader = new FBXLoader();
     loader.setPath('./resources/zombie/');
     loader.load('mremireh_o_desbiens.fbx', (fbx) => {
-<<<<<<< HEAD
-      fbx.position.set(80,0,550);
-=======
       fbx.position.set(600, 0, -100);
->>>>>>> 6494ba02a735e4bc8b846889831d70c713925904
       fbx.scale.setScalar(0.1);
       fbx.traverse(c => {
         c.castShadow = true;
@@ -579,6 +575,22 @@ class ThirdPersonCameraDemo {
 
     document.body.appendChild(this._threejs.domElement);
 
+    // AUDIO
+   const audioLoader = new THREE.AudioLoader();
+
+   const listener = new THREE.AudioListener();
+
+   // check if you can stop this from here
+   this._camera.add(listener);
+
+   const audio = new THREE.Audio(listener);
+
+   audioLoader.load("https://cdn.rawgit.com/ellenprobst/web-audio-api-with-Threejs/57582104/lib/TheWarOnDrugs.m4a", function(buffer) {
+       audio.setBuffer(buffer);
+       audio.setLoop(true);
+       audio.play();
+   });
+
     window.addEventListener('resize', () => {
       this._OnWindowResize();
     }, false);
@@ -611,83 +623,6 @@ class ThirdPersonCameraDemo {
     plane.receiveShadow = true;
     plane.rotation.x = -Math.PI / 2;
     this._scene.add(plane);
-<<<<<<< HEAD
-
-    const loaders = new GLTFLoader();
-    loaders.load('./resources/Level1maze.glb', (gltf) => {
-      gltf.scene.traverse(c => {
-        c.castShadow = false;
-        if ( c.isMesh ) {
-
-          c.material.color.set( 0xFF0000);
-      
-        }
-      });
-      gltf.scene.scale.set(90,150,90);
-      gltf.scene.position.set(-500,0,-500);
-      this._scene.add(gltf.scene);
-    });
-
-     // MAZE DESIGN
-          // ONE AS IN LIKE 1
-          
-
-         /* var BoxGeo =[1000, 200, 10,10, 200, 400,10, 200, 500,10, 200, 400,10, 200, 500,1000, 200, 10,10, 200, 200,10, 200, 300,200, 200, 10,10, 200, 400,300, 200, 10,10, 200, 200,10, 200, 200,300, 200, 10,150, 200, 10,10, 200, 300,250, 200, 10,10, 200, 100,150, 200, 10,600, 200, 10,10, 200, 200,10, 200, 100,150, 200, 10,10, 200, 400,150, 200, 10];
-          var BoxPos = [0, 100, 500,-500, 100, 300,-500, 100, -250,500, 100, 300,500, 100, -250,0, 100, -500,20, 100, -400,-100, 100, 350,0, 100, 350,200, 100, 300,50, 100, 100,20, 100, 100,-250, 100, 300,-250, 100, 200,430, 100, 100,350, 100, 150,-380, 100, 100,-260, 100, 50,-330, 100, 0,200, 100, -100,180, 100, -100,-100, 100, -50,-330, 100, -100,-260, 100, -300,-180, 100, -300];
-            var i;
-          for(i = 0;i < BoxGeo.length; i = i + 3 ){
-
-            const Wall = new THREE.Mesh(
-              new THREE.BoxGeometry(BoxGeo[i], BoxGeo[i+1], BoxGeo[i+2]),
-              new THREE.MeshStandardMaterial({
-                  color: 0xFF0000,
-              }));
-            Wall.position.set(BoxPos[i],BoxPos[i+1],BoxPos[i+2]);
-            Wall.castShadow = true;
-            Wall.receiveShadow = true;
-            this._scene.add(Wall);
-
-          }
-          const dONE = new THREE.Mesh(
-            new THREE.BoxGeometry(10,50,100),
-            new THREE.MeshStandardMaterial({
-                color: 0x008000,
-            }));
-          dONE.position.set(-500,25,50);
-          dONE.castShadow = true;
-          dONE.receiveShadow = true;
-          this._scene.add(dONE);*/
-
-
-
-
-
-
-
-
-          var geometry =  new THREE.BoxGeometry(10,50,100);
-          var cubeMaterials=[
-            new THREE.MeshBasicMaterial( {map: new THREE.TextureLoader().load('./resources/imag.jpg'), side: THREE.DoubleSide}),
-            new THREE.MeshBasicMaterial( {map: new THREE.TextureLoader().load('./resources/imag.jpg'), side: THREE.DoubleSide}),
-            new THREE.MeshBasicMaterial( {map: new THREE.TextureLoader().load('./resources/imag.jpg'), side: THREE.DoubleSide}),
-            new THREE.MeshBasicMaterial( {map: new THREE.TextureLoader().load('./resources/imag.jpg'), side: THREE.DoubleSide}),
-            new THREE.MeshBasicMaterial( {map: new THREE.TextureLoader().load('./resources/imag.jpg'), side: THREE.DoubleSide}),
-            new THREE.MeshBasicMaterial( {map: new THREE.TextureLoader().load('./resources/imag.jpg'), side: THREE.DoubleSide}),
-
-          ];
-          var materials = new THREE.MeshFaceMaterial(cubeMaterials);
-          var cubes = new THREE.Mesh(geometry,materials);
-          cubes.position.set(-500,25,50);
-          this._scene.add(cubes);
-
-         // console.log(BasicCharacterController.position);
-
-         
-      
-      
-      
-      
-=======
     
     var myscene = this._scene;
     maze(myscene);
@@ -748,7 +683,6 @@ class ThirdPersonCameraDemo {
 	crate2.position.set(-600, 20, 50);
 	crate2.receiveShadow = true;
 	crate2.castShadow = true;
->>>>>>> 6494ba02a735e4bc8b846889831d70c713925904
 
     this._mixers = [];
     this._previousRAF = null;
