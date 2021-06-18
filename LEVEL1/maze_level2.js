@@ -96,7 +96,19 @@ export function maze(scene){
             Wall(250,100,10,-300,50,300);
       
             // TWENTY FOUR
-            Wall(10,100,250,-450,50,225);
+            Wall(10,100,450,-450,50,100);
+
+            // TWENTY FIVE
+            Wall(250,100,10,150,50,100);
+
+            // TWENTY SIX
+            Wall(10,100,250,-150,50,0);
+
+            // TWENTY SEVEN
+            Wall(250,100,10,-350,50,-150);
+
+            // TWENTY EIGHT
+            Wall(10,100,250,-150,50,300);
         
 
         // HORIZONTAL LINE
