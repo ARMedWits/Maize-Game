@@ -585,7 +585,7 @@ class ThirdPersonCameraDemo {
 
    const audio = new THREE.Audio(listener);
 
-   audioLoader.load("https://cdn.rawgit.com/ellenprobst/web-audio-api-with-Threejs/57582104/lib/TheWarOnDrugs.m4a", function(buffer) {
+   audioLoader.load("Apocalyptica - S.V.E.R Shadow War.mp3", function(buffer) {
        audio.setBuffer(buffer);
        audio.setLoop(true);
        audio.play();
