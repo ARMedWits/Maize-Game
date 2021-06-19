@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>MAZE LEVEL2</title>
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="base.css">
+</head>
+<body>
+ <div id="info2">
+  <img class ="info2" id = 'welcome2' src="./resources/welcome22.png"/>
+
+ </div>
+
+ <script >
+  setTimeout(function(){
+        var mymess = document.getElementById("welcome2");
+        mymess.parentNode.removeChild(mymess);
+  },5000);
+ 
+</script>
+  
+
+  <script src="./level2.js" type="module">
+  </script>
+   <div id="info">
+    
+    <img class ="images" id = 'msg' src="./resources/Level2Maze.png"/>
+    <img class ="images" id = 'controllers' src="./resources/controls.png"/>
+   
+   
+   <script >
+      setTimeout(function(){
+            var mymess = document.getElementById("msg");
+            mymess.parentNode.removeChild(mymess);
+      },500000);
+     
+   </script>
+  
+  </div>
+</body>
+</html>

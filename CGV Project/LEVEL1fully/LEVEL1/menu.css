@@ -1,0 +1,124 @@
+ /* Container needed to position the button. Adjust the width as needed */
+ .container {
+    position: relative;
+    width: 100%;
+  }
+  
+  /* Make the image responsive */
+  .container img {
+    width: 100%;
+    height: 100%;
+  }
+  
+  /* Style the button and place it in the middle of the container/image */
+  .container .btn {
+    position: absolute;
+    top: 30%;
+    left: 80%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    background-color: white;
+    color: black;
+    font-size: 16px;
+    padding: 12px 24px;
+    border: none;
+    cursor: pointer;
+    border-radius: 12px;
+  }
+  .container .btn1 {
+    position: absolute;
+    top: 40%;
+    left: 80%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    background-color: white;
+    color: black;
+    font-size: 16px;
+    padding: 12px 24px;
+    border: none;
+    cursor: pointer;
+    border-radius: 12px;
+  }
+  .container .btn2 {
+    position: absolute;
+    top: 50%;
+    left: 80%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    background-color: white;
+    color: black;
+    font-size: 16px;
+    padding: 12px 24px;
+    border: none;
+    cursor: pointer;
+    border-radius: 12px;
+  }
+
+  .container .btn3 {
+    position: absolute;
+    top: 60%;
+    left: 80%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    background-color: white;
+    color: black;
+    font-size: 16px;
+    padding: 12px 24px;
+    border: none;
+    cursor: pointer;
+    border-radius: 12px;
+  }
+  .container .btn4 {
+    position: absolute;
+    top: 70%;
+    left: 80%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    background-color: white;
+    color: black;
+    font-size: 16px;
+    padding: 12px 24px;
+    border: none;
+    cursor: pointer;
+    border-radius: 12px;
+  }
+  .container .btn:hover {
+    background-color: rgb(172, 6, 6);
+  } 
+  .container .btn1:hover {
+    background-color: rgb(172, 6, 6);
+  } 
+  .container .btn2:hover {
+    background-color: rgb(172, 6, 6);
+  } 
+  .container .btn3:hover {
+    background-color: rgb(172, 6, 6);
+  } 
+  .container .btn4:hover {
+    background-color: rgb(172, 6, 6);
+  } 
+
+
+  a:link {
+    color: rgb(251, 255, 251);
+    background-color: transparent;
+    text-decoration: none;
+  }
+  
+  a:visited {
+    color: rgb(5, 5, 5);
+    background-color: transparent;
+    text-decoration: none;
+  }
+  
+  a:hover {
+    color: rgb(14, 13, 13);
+    background-color: transparent;
+    
+  }
+  
+  a:active {
+    color: yellow;
+    background-color: transparent;
+   
+  }

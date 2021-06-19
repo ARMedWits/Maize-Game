@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>MAZE LEVEL 1</title>
+  
+  
+  <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+  <link rel="stylesheet" type="text/css" href="base.css">
+</head>
+<body>
+  
+  <audio id="audio" controls style="display:none">
+    <source src="james1.mp3" type="audio/mpeg"> Your browser does not support the audio element.
+  </audio>
+  
+
+  <script src="./main.js" type="module"></script>
+  <script src="./threex.domevents.js" type="module" ></script>
+  <script  src="./maze.js" type="module" ></script>
+ 
+ 
+   <div id="info">
+    
+    <img class ="images" id = 'msg' src="./resources/maze.png"/>
+    <img class ="images" id = 'controllers' src="./resources/controls.png"/>
+    <p class="btn" id="myButton1">
+      <a  href= "index.html"><i>0 POINTS</i></a>
+    </p>
+   
+   
+   <script >
+      setTimeout(function(){
+            var mymess = document.getElementById("msg");
+            mymess.parentNode.removeChild(mymess);
+      },10000);
+     
+   </script>
+   <script >
+    setTimeout(function(){
+          var mymess = document.getElementById("controllers");
+          mymess.parentNode.removeChild(mymess);
+    },5000);
+   
+ </script>
+ 
+  </div>
+  
+</body>
+</html>
